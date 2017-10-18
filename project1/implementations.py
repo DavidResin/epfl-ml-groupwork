@@ -1,5 +1,5 @@
 # Useful imports
-%matplotlib inline
+#%matplotlib inline
 import numpy as np
 import matplotlib.pyplot as plt
 from utility import *
