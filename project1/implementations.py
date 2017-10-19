@@ -8,12 +8,12 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
     """calculates the least squares solution using gradien descent."""
     # Define parameters to store w and loss
     w = initial_w
-    
+
     for n_iter in range(max_iters):
-        
+
         gradient = compute_gradient(y, tx, w)
         loss = compute_mse(y, tx, w)
-        
+
         w = w - gamma * gradient
 
     return w, loss
@@ -26,23 +26,23 @@ def least_squares_SGD(y, tx, initial_w, batch_size, max_iters, gamma):
 
     for n_iter in range(max_iters):
         for y_batch, tx_batch in batch_iter(y, tx, batch_size=batch_size, num_batches=1):
-            
+
             # compute a stochastic gradient and loss
             gradient, _ = compute_stoch_gradient(y_batch, tx_batch, w)
-            
+
             # update w through the stochastic gradient update
             w = w - gamma * gradient
-            
+
             # calculate loss
             loss = compute_mse(y, tx, w)
-            
+
     return w, loss
-  
+
 def least_squares(y, tx):
     """calculates the least squares solution."""
     w = np.linalg.solve(tx.T @ tx, tx.T @ y)
     loss = compute_mse(y, tx, w)
-    
+
     return w, loss
 
 def ridge_regression(y, tx, lambda_):
@@ -52,7 +52,7 @@ def ridge_regression(y, tx, lambda_):
     B = tx.T @ y
     w = np.linalg.solve(A, B)
     loss = np.sqrt(2 * compute_mse(y, tx, w))
-    
+
     return w, loss
 
 def sigmoid(t):
@@ -106,7 +106,7 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
         loss = calculate_loss(y, tx, w) + lambda_ * (w.T @ w)[0, 0]
         grad = calculate_gradient(y, tx, w) + 2 * lambda_ * w
         w -= gamma * grad
-        
+
         losses.append(loss)
 
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:

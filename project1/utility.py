@@ -104,3 +104,10 @@ def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
         end_index = min((batch_num + 1) * batch_size, data_size)
         if start_index != end_index:
             yield shuffled_y[start_index:end_index], shuffled_tx[start_index:end_index]
+
+def build_poly(x, degree):
+    """polynomial basis functions for input data x, for j=0 up to j=degree."""
+    poly = np.ones((len(x), 1))
+    for deg in range(1, degree+1):
+        poly = np.c_[poly, np.power(x, deg)]
+    return poly
