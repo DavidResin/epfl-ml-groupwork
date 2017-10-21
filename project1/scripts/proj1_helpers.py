@@ -106,12 +106,15 @@ def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
         if start_index != end_index:
             yield shuffled_y[start_index:end_index], shuffled_tx[start_index:end_index]
 
+
 def build_poly(x, degree):
     """polynomial basis functions for input data x, for j=0 up to j=degree."""
     poly = np.ones((len(x), 1))
     for deg in range(1, degree+1):
         poly = np.c_[poly, np.power(x, deg)]
     return poly
+
+    
 def load_csv_data(data_path, sub_sample=False):
     """Loads data and returns y (class labels), tX (features) and ids (event ids)"""
     y = np.genfromtxt(data_path, delimiter=",", skip_header=1, dtype=str, usecols=1)
@@ -154,3 +157,16 @@ def create_csv_submission(ids, y_pred, name):
         writer.writeheader()
         for r1, r2 in zip(ids, y_pred):
             writer.writerow({'Id':int(r1),'Prediction':int(r2)})
+
+def findNanValues(table):
+    """
+    Finds all -999 values. Adds a column to the given table to determine which rows have incorrect values.
+    Columns contain: 0 if values all correct
+                     1 if there is one or more -999 value
+    """
+    value = -999
+    nans = []
+    for i in range (0, table.shape[0]):
+        if value in table[i, :]:
+            nans[0, i] = 1
+    np.append(table, nans, axis=1)
