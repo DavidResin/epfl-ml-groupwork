@@ -1,4 +1,10 @@
-from utility import *
+<<<<<<< HEAD
+=======
+import os, sys
+
+sys.path.append(os.path.join(sys.path[0], 'scripts'))
+
+from proj1_helpers import *
 from implementations import *
 
 y_tr, x_tr, ids_tr = load_csv_data("../train.csv")
