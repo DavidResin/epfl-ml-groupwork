@@ -169,4 +169,6 @@ def findNanValues(table):
     for i in range (0, table.shape[0]):
         if value in table[i, :]:
             nans[0, i] = 1
+        else :
+            nans[0, i] = 0
     np.append(table, nans, axis=1)
