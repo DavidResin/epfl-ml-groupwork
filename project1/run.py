@@ -1,3 +1,7 @@
+import os, sys
+
+sys.path.append(os.path.join(sys.path[0], 'scripts'))
+
 from proj1_helpers import *
 from utility import *
 from implementations import *
