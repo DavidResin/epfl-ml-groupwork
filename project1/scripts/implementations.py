@@ -2,7 +2,7 @@
 #%matplotlib inline
 import numpy as np
 import matplotlib.pyplot as plt
-from utility import *
+from proj1_helpers import *
 
 def least_squares_GD(y, tx, initial_w, max_iters, gamma):
     """calculates the least squares solution using gradien descent."""
@@ -63,7 +63,7 @@ def calculate_loss(y, tx, w):
     """compute the cost by negative log likelihood."""
     sig = sigmoid(tx @ w)
     loss = - (y.T @ np.log(sig)) - ((1 - y).T @ np.log(1 - sig))
-    return loss[0, 0]
+    return loss
 
 def calculate_gradient(y, tx, w):
     """compute the gradient of loss."""
@@ -72,7 +72,7 @@ def calculate_gradient(y, tx, w):
 
 def calculate_hessian(y, tx, w):
     """return the hessian of the loss function."""
-    sig = np.diag(sigmoid(tx @ w).T[0])
+    sig = np.diag(sigmoid(tx @ w))
     return tx.T @ np.multiply(sig, (1 - sig)) @ tx
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
@@ -82,7 +82,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     losses = []
     w = initial_w
 
-    for iter in range(max_iter):
+    for iter in range(max_iters):
 
         grad = calculate_gradient(y, tx, w)
         hess = calculate_hessian(y, tx, w)
@@ -101,9 +101,9 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     losses = []
     w = initial_w
 
-    for iter in range(max_iter):
+    for iter in range(max_iters):
 
-        loss = calculate_loss(y, tx, w) + lambda_ * (w.T @ w)[0, 0]
+        loss = calculate_loss(y, tx, w) + lambda_ * (w.T @ w)
         grad = calculate_gradient(y, tx, w) + 2 * lambda_ * w
         w -= gamma * grad
 

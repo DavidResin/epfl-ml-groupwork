@@ -79,7 +79,7 @@ def build_poly(x, degree):
         poly = np.c_[poly, np.power(x, deg)]
     return poly
 
-    
+
 def load_csv_data(data_path, sub_sample=False):
     """Loads data and returns y (class labels), tX (features) and ids (event ids)"""
     y = np.genfromtxt(data_path, delimiter=",", skip_header=1, dtype=str, usecols=1)
@@ -90,7 +90,7 @@ def load_csv_data(data_path, sub_sample=False):
     # convert class labels from strings to binary (-1,1)
     yb = np.ones(len(y))
     yb[np.where(y=='b')] = -1
-    
+
     # sub-sample
     if sub_sample:
         yb = yb[::50]
@@ -105,7 +105,7 @@ def predict_labels(weights, data):
     y_pred = np.dot(data, weights)
     y_pred[np.where(y_pred <= 0)] = -1
     y_pred[np.where(y_pred > 0)] = 1
-    
+
     return y_pred
 
 
@@ -137,3 +137,9 @@ def findNanValues(table):
         else :
             nans[0, i] = 0
     np.append(table, nans, axis=1)
+
+def triage(x):
+    for i in range(x.shape[1]):
+        non_nan = x[np.where(x[:,i] != -999), i]
+        mean = np.mean(non_nan)
+        x[np.where(x[:,i] == -999), i] = mean
