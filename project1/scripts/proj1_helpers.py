@@ -130,10 +130,18 @@ def findNanValues(table):
                      1 if there is one or more -999 value
     """
     value = -999
-    nans = []
-    for i in range (0, table.shape[0]):
-        if value in table[i, :]:
-            nans[0, i] = 1
-        else :
-            nans[0, i] = 0
-    np.append(table, nans, axis=1)
+    newColumns = []
+    function = np.vectorize(lambda x : 0 if x == value else 1)
+
+    for i in range(table.shape[1]):
+        temp = function(table[1, :])
+
+        if 0 in temp:
+            newColumns.append(temp)
+
+    '''
+    reste à insérer ces nouvelles colonnes dans le tableau, mais comment
+    allons-nous travailler avec? estce que ce sont juste de nouvelles features?
+    estce que c'est linké d'une manière ou d'une autre aux colonnes qui leur
+    correspondent?
+    '''
