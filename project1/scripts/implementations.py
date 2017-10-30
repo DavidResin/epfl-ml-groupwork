@@ -11,7 +11,7 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
 
     for n_iter in range(max_iters):
 
-        gradient = compute_gradient(y, tx, w)
+        gradient, _ = compute_gradient(y, tx, w)
         loss = compute_mse(y, tx, w)
 
         w = w - gamma * gradient
@@ -28,7 +28,7 @@ def least_squares_SGD(y, tx, initial_w, batch_size, max_iters, gamma):
         for y_batch, tx_batch in batch_iter(y, tx, batch_size=batch_size, num_batches=1):
 
             # compute a stochastic gradient and loss
-            gradient, _ = compute_stoch_gradient(y_batch, tx_batch, w)
+            gradient, _ = compute_gradient(y_batch, tx_batch, w)
 
             # update w through the stochastic gradient update
             w = w - gamma * gradient
@@ -57,23 +57,26 @@ def ridge_regression(y, tx, lambda_):
 
 def sigmoid(t):
     """apply sigmoid function on t."""
-    return 1.0 / (np.exp(-t) + 1)
+    return np.exp(t) / (1 + np.exp(t))
 
 def calculate_loss(y, tx, w):
     """compute the cost by negative log likelihood."""
-    sig = sigmoid(tx @ w)
-    loss = - (y.T @ np.log(sig)) - ((1 - y).T @ np.log(1 - sig))
-    return loss
+    sigmo = sigmoid(tx.dot(w))
+    vector_loss = y.T.dot(np.log(sigmo)) + (1 - y).T.dot(np.log(1 - sigmo))
+    return np.squeeze(-vector_loss)
 
 def calculate_gradient(y, tx, w):
     """compute the gradient of loss."""
-    sig = sigmoid(tx @ w)
-    return tx.T @ (sig - y)
+    right = sigmoid(tx.dot(w))-y
+    gradient = tx.T.dot(right)
+    return gradient
 
 def calculate_hessian(y, tx, w):
     """return the hessian of the loss function."""
-    sig = np.diag(sigmoid(tx @ w))
-    return tx.T @ np.multiply(sig, (1 - sig)) @ tx
+    sig = sigmoid(tx.dot(w))
+    s = np.multiply(sig, (1-sig))
+    H = (tx.T * (s.T)).dot(tx)
+    return H
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """implements logistic regression using gradient descent or SGD."""
@@ -94,7 +97,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
 
-    return w, loss
+    return w, losses[-1]
 
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     threshold = 1e-8
@@ -104,12 +107,12 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     for iter in range(max_iters):
 
         loss = calculate_loss(y, tx, w) + lambda_ * (w.T @ w)
-        grad = calculate_gradient(y, tx, w) + 2 * lambda_ * w
+        grad = calculate_gradient(y, tx, w) + 2 * lambda_ * w #delete the 2*
         w -= gamma * grad
 
         losses.append(loss)
-
+        
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
 
-    return w, loss
+    return w, losses[-1]

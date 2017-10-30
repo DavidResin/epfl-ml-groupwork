@@ -4,46 +4,30 @@ import numpy as np
 def compute_mse(y, tx, w):
     """compute the loss by mse."""
     e = y - tx.dot(w)
-    mse = e.dot(e) / (2 * len(e))
+    mse = e.dot(e) / (2 * y.shape[0])
     return mse
 
 
 def compute_mae(y, tx, w):
     """Compute the loss by mae."""
-    e = y - tx.dot(w)
+    e = abs(y - tx.dot(w))
     mae = e / len(e)
     return mae
 
 
-def compute_stoch_gradient(y, tx, w):
+def compute_gradient(y, tx, w):
     """Compute a stochastic gradient for batch data."""
-    err = y - tx.dot(w)
+    err = y - np.dot(tx, w)
     grad = -tx.T.dot(err) / len(err)
     return grad, err
 
 
-def compute_gradient(y, tx, w):
-    """Compute the gradient."""
-    gradient = -(1/y.shape[0])*np.dot(tx.T, (y - np.dot(tx, w)))
-    return gradient
-
-
 def standardize(x):
     """Standardize the original data set."""
-    mean_x = np.mean(x)
-    x = x - mean_x
-    std_x = np.std(x)
-    x = x / std_x
-    return x, mean_x, std_x
-
-
-def build_model_data(height, weight):
-    """Form (y,tX) to get regression data in matrix form."""
-    y = weight
-    x = height
-    num_samples = len(y)
-    tx = np.c_[np.ones(num_samples), x]
-    return y, tx
+    meanx = np.mean(x, axis=0)
+    stdx = np.std(x, axis=0)
+    tx = (x-meanx)/stdx
+    return tx
 
 
 def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
