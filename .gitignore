@@ -1,4 +1,6 @@
 train.csv
 test.csv
-project2/twitter-datasets/*
+project2/twitter-datasets/test_neg_full.txt
+project2/twitter-datasets/test_pos_full.txt
 project2/outputs/cooc.pkl
+project2/test.ipynb
