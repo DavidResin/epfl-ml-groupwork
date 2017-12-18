@@ -12,7 +12,7 @@ def main():
     data, row, col = [], [], []
     counter = 1
     for fn in ['train_pos_proc.txt', 'train_neg_proc.txt']:
-        with open(''.join(['../twitter-datasets/', fn])) as f:
+        with open(''.join(['../processed/', fn])) as f:
             for line in f:
                 tokens = [vocab.get(t, -1) for t in line.strip().split()]
                 tokens = [t for t in tokens if t >= 0]

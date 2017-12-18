@@ -22,7 +22,7 @@ def main():
     eta = 0.001
     alpha = 3 / 4
 
-    epochs = 10
+    epochs = 5
 
     for epoch in range(epochs):
         print("epoch {}".format(epoch))
