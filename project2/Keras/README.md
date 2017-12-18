@@ -1,9 +1,9 @@
-Installing Keras library
+###** Installing Keras library **
 
 $ sudo pip install keras
 
-External libraries used
+###** External libraries used **
 
-External datasets used 
+###** External datasets used **
 
 Stanford Glove Twittetter data
