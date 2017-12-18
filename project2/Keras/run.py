@@ -52,22 +52,12 @@ embedding_matrix_200 =embedding_matrix(TWITTER_GLOVE_PATH,word_index,nb_word,emb
 xtrain = pad_sequences(sequences_train, maxlen=sequence_length)
 xtest = pad_sequences(sequences_test, maxlen=sequence_length)
 
-# split data training and testing
+# randomize data
 num_row = len(labels)
 indices = np.random.permutation(num_row)
 train = xtrain[indices]
 label_train=labels[indices]
-# save the all varibles 
-#np.save('CNN/real_test_full.npy',xtest)
-#np.save('CNN/train_full.npy',train)
-#np.save('CNN/label_train_full.npy',label_train)
-#np.save('CNN/embeddings_200_full.npy',embedding_matrix_200)
-#
-### take all variable back
-#kaggle_sub=np.load('CNN/real_test_full.npy',encoding='ASCII')
-#X_train=np.load('CNN/train_full.npy',encoding='ASCII')
-#Y_train=np.load('CNN/label_train_full.npy',encoding='ASCII')
-#embedding_matrix_200=np.load('CNN/embeddings_200_full.npy',encoding='ASCII')
+# split data training, validation and testing if one wants
 '''
 nb_tweets_train=1000000
 nb_tweets_test=100000
