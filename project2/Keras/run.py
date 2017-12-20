@@ -50,7 +50,7 @@ embedding_matrix_200 =embedding_matrix(TWITTER_GLOVE_PATH,word_index,nb_word,emb
 
 # put at the same lenght every sentences (lenght = max of all sentences)
 xtrain = pad_sequences(sequences_train, maxlen=sequence_length)
-xtest = pad_sequences(sequences_test, maxlen=sequence_length)
+Kaggle_sub = pad_sequences(sequences_test, maxlen=sequence_length)
 
 # randomize data
 num_row = len(labels)
@@ -73,8 +73,8 @@ y_test=Y_train[nb_tweets_train+validation_split+1 :nb_tweets_train+validation_sp
 x_train=train
 y_train=label_train
 
-filters = [2,3,4]
-num_filters = 140
+filters = [3,4,5]
+num_filters = 120
 drop = 0.6
 
 nb_epoch = 3
