@@ -8,17 +8,76 @@ Created on Mon Dec  4 23:50:42 2017
 import numpy as np
 from scipy.sparse import *
 import csv
+import re
+#from gensim.models.keyedvectors import KeyedVectors
+#from gensim.models import KeyedVectors
 
-def prediction():
-    i=0
-    f_pos = open('../processed/prediction.txt', 'r', encoding="utf-8")
-    lines = f_pos.readlines()
-    l=len(lines)
-    results=np.zeros(l,dtype=int)
-    for line in lines:
-        results[i]=line.replace('__label__','')    
-        i=i+1
-    return results
+def clean_str(string):
+    """
+    Tokenization/string cleaning for all datasets except for SST.
+    Original taken from https://github.com/yoonkim/CNN_sentence/blob/master/process_data.py
+    """
+         #  Delete url and user 
+    string = re.sub(r'<user>', ' ', string)
+    string = re.sub(r'<url>', ' ', string)
+    # Change the conjugaison
+    string = re.sub(r"what's ", "what is ", string)
+    string = re.sub(r" \'s ", " is ", string)
+    string = re.sub(r" \'ve ", " have ", string)
+    string = re.sub(r"can't ", "cannot ", string)
+    string = re.sub(r"n't ", " not ", string)
+    string = re.sub(r"i'm ", " i am ", string)
+    string = re.sub(r"i've ", " i have ", string)
+    string = re.sub(r"youre ", " you are ", string)
+    string = re.sub(r"it's ", " it is ", string)
+    string = re.sub(r"\'re ", " are ", string)
+    string = re.sub(r"\'d ", " would ", string)
+    string = re.sub(r"\'ll ", " will ", string)
+    string = re.sub(r"don't ", " dont ", string)
+    string = re.sub(r"im ", " i am ", string)
+    # change the ponctuation 
+    string = re.sub(r"[^A-Za-z0-9^,!.\/'+-=]", " ", string)
+    string = re.sub(r"\d", " ", string) 
+    string = re.sub(r",", " ", string)
+    string = re.sub(r"\.", " ", string)
+    string = re.sub(r"!", " ! ", string)
+    string = re.sub(r"\/", " ", string)
+    string = re.sub(r"\^", " ^ ", string)
+    string = re.sub(r"\+", " + ", string)
+    string = re.sub(r"\-", " - ", string)
+    string = re.sub(r"\=", " = ", string)
+    string = re.sub(r"'", " ", string)
+    string = re.sub(r"(\d+)(k)", r"\g<1>000", string)
+    string = re.sub(r":", " : ", string)
+    string = re.sub(r"\0s", "0", string)
+    string = re.sub(r"e - mail", "email", string)
+    string = re.sub(r"\s{2,}", " ", string)
+   
+    return string.strip().lower()
+
+def clean_files():
+    positive_examples = list(open('../twitter-datasets/train_pos_full.txt', "r", encoding="utf-8").readlines())
+    positive_examples = [s.strip() for s in positive_examples]
+    negative_examples = list(open('../twitter-datasets/train_neg_full.txt', "r", encoding="utf-8").readlines())
+    negative_examples = [s.strip() for s in negative_examples]
+    test_examples = list(open('../twitter-datasets/test_data.txt', "r", encoding="utf-8").readlines())
+    test_examples = [s.strip() for s in test_examples]
+    # process every words
+    positive_string = [clean_str(sent) for sent in positive_examples]
+    negative_string = [clean_str(sent) for sent in negative_examples]
+    test_string = [clean_str(sent) for sent in test_examples]
+
+    with open('../processed/train_pos_fastText_full.txt', 'w', encoding="utf-8") as f:
+        for sent in positive_string:
+            f.write(sent + '\n')
+
+    with open('../processed/train_neg_fastText_full.txt', 'w', encoding="utf-8") as f:
+        for sent in negative_string:
+            f.write(sent + '\n')
+
+    with open('../processed/test_data_fastText.txt', 'w', encoding="utf-8") as f:
+        for sent in test_string:
+            f.write(sent + '\n')
 
 def load_data_and_labels(positive_data_file, negative_data_file, test_data_file):
     """
@@ -47,7 +106,7 @@ def submission(results):
         index = 0
         sub_writer.writeheader()
         for res in results:
-            index += 1
-            sub_writer.writerow({'Id': str(index), 'Prediction': str(res)})
+            index=index+1
+            sub_writer.writerow({'Id': str(index), 'Prediction': str(res[0][0])})
         print("Submission file created")
 
