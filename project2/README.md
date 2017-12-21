@@ -2,8 +2,8 @@
 
 Twitter and other social medias can be good indicators of a population’s emotions, making so that tweets - due to their format of short texts - are a good dataset to try sentiment analysis techniques upon. Thus, our project focused on finding a combination of Machine Learning techniques to be able to predict what a user’s sentiment is just from the text.
 To test these out we were provided with a dataset of tweets which had previously happy or sad smileys.
-Our approach to solve this problem was to first clean up the data using usual NLP used in data science. Then, we implemented several methods to create predictions that would be as accurate as possible. Thus, we tried to apply FastText, a Random Tree Classifier, TF-IDF using two different classifiers and a Convolutional Neural Network.
-As a result, we found that FastText and CNN are the best prediction techniques for our dataset.
+Our approach to solve this problem was to first clean up the data using usual NLP used in data science. Then, we implemented several methods to create predictions that would be as accurate as possible. Thus, we tried to apply Fast Text, a Random Tree Classifier, TF-IDF using two different classifiers and a Convolutional Neural Network.
+As a result, we found that Fast Text and CNN are the best prediction techniques for our dataset.
 
 
 ## Getting Started
@@ -16,9 +16,14 @@ You will need to have several libraries installed, for example pandas and numpy 
 You will also need Jupyter Notebook.
 
 ```
-pip install fasttext
 pip install tensorflow
-pip isntall keras
+pip install keras
+```
+
+To install Fast Text, you will need to follow the steps described here:
+
+```
+https://github.com/facebookresearch/fastText
 ```
 
 You will also need to download the nltk library at least once by using the
@@ -31,7 +36,7 @@ command. Note that this command can be found in the process_tweets notebook.
 
 ### Installing
 
-Once you have cloned the code, you will see that a few files are missing. This is because a lot of the files are too big to be direclty on the git. Those file are the full positive and negative tweets that were given with the project.
+Once you have cloned the code, you will see that a few files are missing. This is because a lot of the files are too big to be directly on the git. Those file are the full positive and negative tweets that were given with the project.
 
 ```
 \twitter-datasets\train_neg_full.txt
