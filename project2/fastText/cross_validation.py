@@ -6,16 +6,25 @@ Created on Sat Dec  9 09:43:26 2017
 @author: Nicolas
 """
 import numpy as np
-from helpers import load_data_and_labels
+from helpers import load_data_and_labels,clean_files
 from sklearn.model_selection import KFold
 import fasttext
+import os
 
+
+# Clean file if not exist
+if not os.path.exists('../processed/train_pos_fastText_full.txt') \
+    or not os.path.exists('../processed/train_neg_fastText_full.txt'):
+        print('Cleaned fastText files do not exist')
+        clean_files()
+        
+        
 # Load data from processed files
-train,labels,test=load_data_and_labels('../processed/train_pos_full.txt','../processed/train_neg_full.txt','../processed/test_data.txt')
+train,labels,test=load_data_and_labels('../processed/train_pos_fastText_full.txt','../processed/train_neg_fastText_full.txt','../processed/test_data_fastText.txt')
 
 # define the parameters for the fastText classifier
 window=10
-epochs=10
+epochs=20
 
 i=0
 # create random indices of the rows size
@@ -43,7 +52,7 @@ for train_indices, test_indices in k_fold.split(labels):
     # Build the fastText classifier 
     classifier = fasttext.supervised('../processed/fastText_train_labels.txt', 'model_cros_val', label_prefix='__label__', ws =window,epoch=epochs)
     # evaluate how the classifier performs on the testing set
-    result = classifier.test('../process/fastText_test_labels.txt')
+    result = classifier.test('../processed/fastText_test_labels.txt')
     # Saving for every iterations the accuracy
     accuracy[i]=result.precision
     i=i+1
