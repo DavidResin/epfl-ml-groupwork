@@ -4,6 +4,6 @@ project2/twitter-datasets/*
 project2/processed/*
 project2/fastText/*.bin
 project2/fastText/*.vec
+project2/outputs/*
 project2/outputs/cooc.pkl
 project2/glove/*
-
