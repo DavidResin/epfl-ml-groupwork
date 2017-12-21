@@ -68,3 +68,19 @@ ml_fasttext.ipynb
 CNN_notebook.ipynb
 ml_random_forest.ipynb
 ```
+
+You should run the notebooks in the following order:
+
+```
+process_tweets.ipynb
+ml_tf_idf.ipynb
+ml_fasttext.ipynb
+CNN_notebook.ipynb
+ml_random_forest.ipynb
+```
+
+If you only want to test out the best submission, you should run:
+```
+Keras/run.py
+```
+This script might take a long time to run depending on your computation power.
